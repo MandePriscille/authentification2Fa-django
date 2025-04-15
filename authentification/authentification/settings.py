@@ -118,6 +118,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# URL d'accès aux fichiers statiques (dans le HTML)
+STATIC_URL = '/static/'
+
+# Dossier de collecte (commande collectstatic)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Dossiers de recherche des fichiers static dans les apps
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
