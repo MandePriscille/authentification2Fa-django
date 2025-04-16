@@ -6,12 +6,13 @@ from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.conf import settings
 from django.views import View
 from .models import Otp, User
 
 # from authentification.user.forms import RegisterForm, OtpForm
-from .forms import RegisterForm, OtpForm
+from .forms import RegisterForm, OtpForm, LoginForm
 
 
 class RegisterView(View):
@@ -58,11 +59,11 @@ class RegisterView(View):
 
             request.session['register_email'] = user.email
             messages.success(request, 'Your account has been created. Please check your email for the verification code.')
-            return redirect(reverse_lazy('login'))
+            return redirect(reverse_lazy('verififyEmail'))
         return render(request, self.template_name, {'form': form})      
     
 
-class verififyEmailView(View):
+class verifyEmailView(View):
     template_name = 'accounts/verify_email.html'
     forms_class = OtpForm
 
@@ -81,7 +82,7 @@ class verififyEmailView(View):
         form = self.forms_class(request.POST)
         email = request.session['register_email']
         if form.is_valid():
-            otp_code = form.cleaned_data['otp_code']
+            otp_code = form.cleaned_data['code']
 
             try:
                 user = User.objects.get(email=email)
@@ -93,8 +94,9 @@ class verififyEmailView(View):
                     messages.error(request, 'This code is not valid. Please try again.')
                 else:
                     user.is_active = True
+                    otp.save()
+                    user.is_active = True
                     user.save()
-                    
                     del request.session['register_email']
                     messages.success(request, 'Your account has been activated. Please login.')
                     return redirect('login')
@@ -105,3 +107,34 @@ class verififyEmailView(View):
         return redirect('register')
 
 
+class LoginView(View):
+    template_name = 'accounts/login.html'
+    form_class = LoginForm
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email=form.cleaned_data['email']
+            password=form.cleaned_data['password']
+            user = authenticate(request,email=email, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You have been logged in.')
+                return redirect('home')
+            else:
+                messages.success(request, 'You have been logged in.')
+                return redirect('home')
+        else:
+            messages.error(request, 'Your account is not activated. Please check your email for the verification code.')
+        return render(request, self.template_name, {'form': form})
+    
+
+class HomeView(View):
+    template_name = 'accounts/home.html'
+
+    def get(self, request):
+        return render(request, self.template_name)

@@ -32,7 +32,8 @@ class User(BaseModel, AbstractBaseUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(max_length=254, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20)
     username= None
     USERNAME_FIELD = 'email'
@@ -52,8 +53,8 @@ class User(BaseModel, AbstractBaseUser):
 
 class Otp(BaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    code = models.CharField(max_length=20)
-    expiration_at = models.DateField()
+    code = models.CharField(max_length=6)
+    expiration_at = models.DateTimeField()
     is_used = models.BooleanField(default=False)
 
     def __str__(self):

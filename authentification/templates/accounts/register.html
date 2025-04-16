@@ -6,11 +6,6 @@
 
 <form method= "POST">
     {% csrf_token %}
-{% comment %} <label> password: </label>
-<input type="text" name="password" >
-<input type="text" name="confirm password">
-<input type="submit" value="Register"> {% endcomment %}
-
 {{ form.as_p }}
 <input type="submit" value="Register">
 </form>

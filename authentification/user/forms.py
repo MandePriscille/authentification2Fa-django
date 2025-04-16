@@ -38,3 +38,27 @@ class OtpForm(forms.ModelForm):
         fields = ['code']
 
  
+class LoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email', 'password']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+
+        if not email or not password:
+            self.add_error('email', 'This field is required')
+            self.add_error('password', 'This field is required')
+            return cleaned_data
+
+        user = User.objects.get(email=email)
+        if not user.is_active:
+            self.add_error('email', 'Your account is not activated. Please check your email for the verification code.')
+            return cleaned_data
+        
+        if not user.check_password(password):
+            self.add_error('password', 'Invalid password')
+            return cleaned_data
+        return cleaned_data
