@@ -20,7 +20,6 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
     
 
-
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
