@@ -25,7 +25,7 @@ class RegisterView(View):
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = User.object.create_user(
+            user = User.objects.create_user(
                 email=form.cleaned_data['email'],
                 password=form.cleaned_data['password'],
                 first_name=form.cleaned_data['first_name'],
@@ -49,10 +49,10 @@ class RegisterView(View):
 
             # sent mail
             send_mail(
-                'Your verification code',
-                {otp_code},
-                settings.DEFAULT_FROM_EMAIL,
-                [user.email],
+                subject='Your verification code : {otp_code}',
+                message='Your code is: {}'.format(otp_code),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[user.email],
                 fail_silently=False
             )
 
