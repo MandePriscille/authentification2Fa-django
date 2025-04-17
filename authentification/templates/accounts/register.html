@@ -4,7 +4,7 @@
 {% block css %} 
     <style>
         body{
-            background-color: #ffffff;
+            background-color: #dddddd;
         }
     </style>
 {% endblock %}
@@ -12,62 +12,72 @@
 {% block content %}
 
 <div class="container mt-5">
+    <h1 class="card-title">Register</h1>
+            
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title">Register</h1>
-            
+                   
                     <form method="POST">
                         {% csrf_token %}
-                        
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <label for="{{ form.first_name.id_for_label }}">First Name</label>
-                                {{ form.first_name }}
-                                {% if form.first_name.errors %}
-                                    <div class="error">{{ form.first_name.errors }}</div>
-                                {% endif %}
+                        <div class ="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <label for="{{ form.first_name.id_for_label }}">First Name</label>
+                                        {{ form.first_name }}
+                                        {% if form.first_name.errors %}
+                                            <div class="error">{{ form.first_name.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <label for="{{ form.last_name.id_for_label }}">Last Name</label>
-                                {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                    <div class="error">{{ form.last_name.errors }}</div>
-                                {% endif %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                            <div class="error">{{ form.last_name.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <label for="{{ form.email.id_for_label }}">Email</label>
-                                {{ form.email }}
-                                {% if form.email.errors %}
-                                    <div class="error">{{ form.email.errors }}</div>
-                                {% endif %}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <label for="{{ form.email.id_for_label }}">Email</label>
+                                        {{ form.email }}
+                                        {% if form.email.errors %}
+                                            <div class="error">{{ form.email.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <label for="{{ form.password.id_for_label }}">Password</label>
-                                {{ form.password }}
-                                {% if form.password.errors %}
-                                    <div class="error">{{ form.password.errors }}</div>
-                                {% endif %}
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <label for="{{ form.password.id_for_label }}">Password</label>
+                                        {{ form.password }}
+                                        {% if form.password.errors %}
+                                            <div class="error">{{ form.password.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="mb-3">
-                                <label for="{{ form.confirm_password.id_for_label }}">Confirm password</label>
-                                {{ form.confirm_password }}
-                                {% if form.confirm_password.errors %}
-                                    <div class="error">{{ form.confirm_password.errors }}</div>
-                                {% endif %}
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="mb-3">
+                                        <label for="{{ form.confirm_password.id_for_label }}">Confirm password</label>
+                                        {{ form.confirm_password }}
+                                        {% if form.confirm_password.errors %}
+                                            <div class="error">{{ form.confirm_password.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         

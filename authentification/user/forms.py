@@ -1,36 +1,92 @@
 from  django import forms
 from .models import User, Otp
+from django.core.validators import MinLengthValidator
 
 class RegisterForm(forms.ModelForm):
     password = forms.CharField(
-        label = "Password",
-        widget = forms.PasswordInput
+        label="Mot de passe",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Créez un mot de passe sécurisé',
+            'autocomplete': 'new-password',
+        }),
+        validators=[MinLengthValidator(8)],
+        help_text="Minimum 8 caractères"
     )
+    
     confirm_password = forms.CharField(
-        label = "Confirm Password",
-        widget = forms.PasswordInput
+        label="Confirmation du mot de passe",
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Retapez votre mot de passe',
+            'autocomplete': 'new-password',
+        })
     )
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password', 'confirm_password']
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Votre prénom',
+                'autofocus': True
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Votre nom'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'exemple@email.com'
+            }),
+        }
+        labels = {
+            'first_name': "Prénom",
+            'last_name': "Nom",
+            'email': "Adresse email",
+        }
+        help_texts = {
+            'email': "we not share your email with anyone else",
+        }
 
-    # clean method verifies that the password and confirm_password fields match
-    # clean method also verifies that the email address doesn't already exist
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            if 'class' not in self.fields[field].widget.attrs:
+                self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "This email is already registered.",
+                "pleace register first",
+            )
+        return email
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
 
         if password and confirm_password and password != confirm_password:
-            self.add_error('confirm_password', 'Passwords do not match')
-
-        # verify the email address don't already exist
-        email = cleaned_data.get('email')
-        if email and User.objects.filter(email=email).exclude():
-            self.add_error('email', 'Email already exists')
+            self.add_error(
+                'confirm_password',
+                forms.ValidationError(
+                    "Les mots de passe ne correspondent pas",
+                    code='password_mismatch'
+                )
+            )        
         return cleaned_data
-    
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
+       
 
 class OtpForm(forms.ModelForm):
     class Meta:
