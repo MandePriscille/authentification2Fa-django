@@ -1,13 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<h1> Login </h1>
-
-<form method= "POST">
-    {% csrf_token %}
-{{ form.as_p }}
-<input type="submit" value="Login">
-</form> 
-
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Login</h5>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Se connecter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

@@ -1,9 +1,22 @@
 {% extends "base.html" %}
-{% block content %}
 
-<form method= "POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Verify">
-</form>
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Vérifiez votre Email</h5>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.as_p }}
+                        </div>
+                        <button type="submit" class="btn btn-success w-100">Vérifier</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
