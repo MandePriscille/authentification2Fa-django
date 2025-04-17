@@ -35,7 +35,7 @@ class RegisterView(View):
             )
         
             # Genere code OTP
-            otp_code = str(random.randint(1000, 9999))
+            otp_code = str(random.randint(10000, 99999))
             exppiration = timezone.now() + timedelta(minutes=5)
 
             # create OTP
